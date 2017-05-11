@@ -25,6 +25,7 @@ subtest 'die when given version' => {
         cmp-ok .out.slurp(:close), '~~', *.contains('alive').not, 'died';
         cmp-ok .err.slurp(:close), '~~',
             {.contains('requires Rakudo compiler version v420000')
+              and .contains(' v2017.03.290')
               and .contains('EVAL')},
           'error message tells us which Rakudo version needed and where it was';
     }
@@ -82,6 +83,7 @@ subtest 'die when given version and no-where' => {
         cmp-ok .out.slurp(:close), '~~', *.contains('alive').not, 'died';
         cmp-ok .err.slurp(:close), '~~',
             {.contains('requires Rakudo compiler version v420000')
+              and .contains(' v2017.03.290')
               and .contains('EVAL').not},
           'error message tells us which Rakudo version needed and no where';
     }

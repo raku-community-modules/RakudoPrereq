@@ -11,7 +11,8 @@ sub EXPORT (Version:D $v, Str $user-message?, Str() $opts = '') {
     my $out = ($*PERL.compiler.name ne 'rakudo' and %opts<rakudo-only>)
         ?? ($user-message || $message)
         !! ($*PERL.compiler.version before $v)
-            ?? ($user-message || "$message version $v.perl() or newer")
+            ?? ($user-message || "$message version $v.perl() or newer; this is"
+              ~ " $*PERL.compiler.version.perl()")
             !! return Map.new;
 
     $out ~= "\nat $where-to" unless %opts<no-where>;
