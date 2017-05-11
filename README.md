@@ -20,6 +20,10 @@ RakudoPrereq - Specify minimum required versions of Rakudo
     # specify minimum Rakudo version 2017.04, use custom message and die
     # when non-Rakudo compiler is used
     use RakudoPrereq v2017.04, 'your compiler is no good', 'rakudo-only';
+
+    # specify minimum Rakudo version 2017.04, use default message and die
+    # when non-Rakudo compiler is used and don't print location of `use`
+    use RakudoPrereq v2017.04, '', 'rakudo-only no-where';
 ```
 
 # DESCRIPTION
