@@ -1,4 +1,4 @@
-sub EXPORT (Version:D $v, Str $user-message?, Str:D $opts = '') {
+sub EXPORT (Version:D $v, Str $user-message?, Str() $opts = '') {
     my constant @valid-opts = <rakudo-only  no-where>;
     my $where-to = try {$*W.current_file} // '<unknown file>';
     my $message = 'This program requires Rakudo compiler';
