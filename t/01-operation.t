@@ -15,7 +15,7 @@ my $code = ｢
         }
     }.new;
     use lib 'lib';
-    require RakudoPrereq $ARGS;
+    EVAL 'use RakudoPrereq $ARGS';
     say "alive";
 ｣;
 
@@ -43,7 +43,7 @@ subtest 'die when given version and rakudo-only' => {
     plan 3;
     with run :out, :err, $*EXECUTABLE, '-e', $code.subst(
       '$ARGS', 'v420000, "", "rakudo-only"'
-    ).subst(｢'rakudo'｣, 'something else') {
+    ).subst(｢'rakudo'｣, ｢'something else'｣) {
         ok .out.slurp(:close).contains('alive').not, 'died';
         with .err.slurp(:close) {
             ok .contains('requires Rakudo compiler'),
@@ -57,7 +57,7 @@ subtest 'die when given version and rakudo-only' => {
     plan 3;
     with run :out, :err, $*EXECUTABLE, '-e', $code.subst(
       '$ARGS', 'v420000, "custom message", "rakudo-only"'
-    ).subst(｢'rakudo'｣, 'something else') {
+    ).subst(｢'rakudo'｣, ｢'something else'｣) {
         ok .out.slurp(:close).contains('alive').not, 'died';
         with .err.slurp(:close) {
             ok .contains('custom message'), 'error message has custom message';
