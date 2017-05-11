@@ -27,6 +27,9 @@ RakudoPrereq - Specify minimum required versions of Rakudo
 Need to black-list non-Rakudo compilers or some Rakudo versions that implement
 the same language version? This module is for you!
 
+If the program is run on a Rakudo that's too old, the module will print a
+message and exit with status `1`
+
 # USAGE
 
 The entire API is via the arguments specified on the `use RakudoPrereq` line.
