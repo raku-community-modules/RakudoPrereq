@@ -1,7 +1,7 @@
 use lib 'lib';
 use Test;
 
-plan 4;
+plan 9;
 
 my $code = ｢
     my $*PERL := class FakePerl {
@@ -22,9 +22,11 @@ my $code = ｢
 subtest 'die when given version' => {
     plan 2;
     with run :out, :err, $*EXECUTABLE, '-e', $code.subst('$ARGS', 'v420000') {
-        ok .out.slurp(:close).contains('alive').not, 'died';
-        ok .err.slurp(:close).contains('requires Rakudo compiler v420000'),
-          'error message tells us which Rakudo version needed';
+        cmp-ok .out.slurp(:close), '~~', *.contains('alive').not, 'died';
+        cmp-ok .err.slurp(:close), '~~',
+            {.contains('requires Rakudo compiler version v420000')
+              and .contains('EVAL')},
+          'error message tells us which Rakudo version needed and where it was';
     }
 }
 
@@ -33,9 +35,10 @@ subtest 'die when given version and custom message' => {
     with run :out, :err, $*EXECUTABLE, '-e', $code.subst(
       '$ARGS', 'v420000, "custom message"'
     ) {
-        ok .out.slurp(:close).contains('alive').not, 'died';
-        ok .err.slurp(:close).contains('custom message v420000'),
-          'error message has custom message and Rakudo version';
+        cmp-ok .out.slurp(:close), '~~', *.contains('alive').not, 'died';
+        cmp-ok .err.slurp(:close), '~~',
+          {.contains('custom message') and .contains('EVAL')},
+          'error message has custom message and location';
     }
 }
 
@@ -44,11 +47,13 @@ subtest 'die when given version and rakudo-only' => {
     with run :out, :err, $*EXECUTABLE, '-e', $code.subst(
       '$ARGS', 'v420000, "", "rakudo-only"'
     ).subst(｢'rakudo'｣, ｢'something else'｣) {
-        ok .out.slurp(:close).contains('alive').not, 'died';
+        cmp-ok .out.slurp(:close), '~~', *.contains('alive').not, 'died';
         with .err.slurp(:close) {
-            ok .contains('requires Rakudo compiler'),
-                'error message tells us we need Rakudo';
-            ok .contains('v420000').not, 'error does not mention version';
+            cmp-ok $_, '~~',
+                {.contains('requires Rakudo compiler') and .contains('EVAL')},
+                'error message tells us we need Rakudo and where it was';
+            cmp-ok $_, '~~', *.contains('v420000').not,
+                'error does not mention version';
         }
     }
 }
@@ -58,10 +63,85 @@ subtest 'die when given version and rakudo-only' => {
     with run :out, :err, $*EXECUTABLE, '-e', $code.subst(
       '$ARGS', 'v420000, "custom message", "rakudo-only"'
     ).subst(｢'rakudo'｣, ｢'something else'｣) {
-        ok .out.slurp(:close).contains('alive').not, 'died';
+        cmp-ok .out.slurp(:close), '~~', *.contains('alive').not, 'died';
         with .err.slurp(:close) {
-            ok .contains('custom message'), 'error message has custom message';
-            ok .contains('v420000').not, 'error does not mention version';
+            cmp-ok $_, '~~',
+                {.contains('custom message') and .contains('EVAL')},
+                'error message has custom message and where it was';
+            cmp-ok $_, '~~', *.contains('v420000').not,
+                'error does not mention version';
         }
+    }
+}
+
+subtest 'die when given version and no-where' => {
+    plan 2;
+    with run :out, :err, $*EXECUTABLE, '-e', $code.subst(
+      '$ARGS', 'v420000, "", "no-where"'
+    ) {
+        cmp-ok .out.slurp(:close), '~~', *.contains('alive').not, 'died';
+        cmp-ok .err.slurp(:close), '~~',
+            {.contains('requires Rakudo compiler version v420000')
+              and .contains('EVAL').not},
+          'error message tells us which Rakudo version needed and no where';
+    }
+}
+
+subtest 'die when given version and custom message and no-where' => {
+    plan 2;
+    with run :out, :err, $*EXECUTABLE, '-e', $code.subst(
+      '$ARGS', 'v420000, "custom message", "no-where"'
+    ) {
+        cmp-ok .out.slurp(:close), '~~', *.contains('alive').not, 'died';
+        cmp-ok .err.slurp(:close), '~~',
+          {.contains('custom message') and .contains('EVAL').not},
+          'error message has custom message and no where';
+    }
+}
+
+subtest 'die when given version and rakudo-only and no-where' => {
+    plan 3;
+    with run :out, :err, $*EXECUTABLE, '-e', $code.subst(
+      '$ARGS', 'v420000, "", "no-where rakudo-only"'
+    ).subst(｢'rakudo'｣, ｢'something else'｣) {
+        cmp-ok .out.slurp(:close), '~~', *.contains('alive').not, 'died';
+        with .err.slurp(:close) {
+            cmp-ok $_, '~~',
+                {.contains('requires Rakudo compiler')
+                  and .contains('EVAL').not},
+                'error message tells us we need Rakudo and where it was';
+            cmp-ok $_, '~~', *.contains('v420000').not,
+                'error does not mention version';
+        }
+    }
+}
+
+subtest 'die when given version and rakudo-only and no-where' => {
+    plan 3;
+    with run :out, :err, $*EXECUTABLE, '-e', $code.subst(
+      '$ARGS', 'v420000, "custom message", "rakUdo-oNly nO-wHeRe"'
+    ).subst(｢'rakudo'｣, ｢'something else'｣) {
+        cmp-ok .out.slurp(:close), '~~', *.contains('alive').not, 'died';
+        with .err.slurp(:close) {
+            cmp-ok $_, '~~',
+                {.contains('custom message') and .contains('EVAL').not},
+                'error message has custom message and where it was';
+            cmp-ok $_, '~~', *.contains('v420000').not,
+                'error does not mention version';
+        }
+    }
+}
+
+subtest 'die when given invalid options' => {
+    plan 2;
+    with run :out, :err, $*EXECUTABLE, '-e', $code.subst(
+      '$ARGS', 'v420000, "custom message", "rakudo-only no-where blah-blah"'
+    ).subst(｢'rakudo'｣, ｢'something else'｣) {
+        cmp-ok .out.slurp(:close), '~~', *.contains('alive').not, 'died';
+        cmp-ok .err.slurp(:close), '~~',
+            { not .contains('custom message')
+              and .contains('EVAL')
+              and .contains('blah-blah')},
+            'error message has custom message and where it was';
     }
 }
