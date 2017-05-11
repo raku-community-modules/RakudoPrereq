@@ -38,8 +38,9 @@ The entire API is via the arguments specified on the `use RakudoPrereq` line.
   before exiting, you can specify a custom message here. Default message will
   be printed if the specified custom message is an empty string
 - **String with options:** space-separated string of options
-  - `rakudo-only` - fail for non-Rakudo compilers as well, regardless of
-    their version
+  - `rakudo-only` - by default, the module would not fail if the compiler
+    is not Rakudo. Specify this option if you want to fail for non-Rakudo
+    compilers as well, regardless of their version.
   - `no-where` - both the default and custom message will have the location
     of where the `use RakudoPrereq` that caused failure is at. Specify this
     argument if you want to surpress that information.
