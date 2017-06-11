@@ -2,6 +2,8 @@ use lib 'lib';
 use Test;
 
 plan 9;
+%*ENV<DO_RAKUDO_PREREQ_TESTS>
+    or skip 'set DO_RAKUDO_PREREQ_TESTS to run tests. Skipping due to weird errors when installing with zef', 9;
 
 my $code = ｢
     my $*PERL := class FakePerl {
