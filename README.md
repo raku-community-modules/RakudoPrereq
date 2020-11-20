@@ -11,7 +11,7 @@ RakudoPrereq - Specify minimum required versions of Rakudo
 
     # specify minimum Rakudo version 2017.04, with custom message
     # when user's Rakudo is too old
-    use RakudoPrereq v2017.04, 'Your Perl 6 is way too old, bruh!';
+    use RakudoPrereq v2017.04, 'Your Raku is way too old, bruh!';
 
     # specify minimum Rakudo version 2017.04, use default message and die
     # when non-Rakudo compiler is used
@@ -39,7 +39,7 @@ message and exit with status `1`
 The entire API is via the arguments specified on the `use RakudoPrereq` line.
 
 - **Minimum Rakudo version:** The first argument is required and is the
-  [`Version`](https://docs.perl6.org/type/Version)
+  [`Version`](https://docs.raku.org/type/Version)
   object specifying the minimum required Rakudo version.
 - **Custom message:** by default, the module will print a generic message
   before exiting, you can specify a custom message here. Default message will
@@ -57,12 +57,12 @@ The entire API is via the arguments specified on the `use RakudoPrereq` line.
 #### REPOSITORY
 
 Fork this module on GitHub:
-https://github.com/zoffixznet/perl6-RakudoPrereq
+https://github.com/raku-community-modules/RakudoPrereq
 
 #### BUGS
 
 To report bugs or request features, please use
-https://github.com/zoffixznet/perl6-RakudoPrereq/issues
+https://github.com/raku-community-modules/RakudoPrereq/issues
 
 #### AUTHOR
 
