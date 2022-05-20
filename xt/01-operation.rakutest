@@ -1,14 +1,9 @@
-use lib 'lib';
 use Test;
 
 plan 9;
-unless %*ENV<DO_RAKUDO_PREREQ_TESTS> {
-    skip 'set DO_RAKUDO_PREREQ_TESTS to run tests. Skipping due to weird errors when installing with zef', 9;
-    exit;
-}
 
 my $code = ｢
-    my $*PERL := class FakePerl {
+    my $*RAKU := class FakePerl {
         method compiler {
             class FakeCompiler {
                 has $.id   = '2357471601F275BAC6F2A55E972FEECEA97BC47'
@@ -18,14 +13,13 @@ my $code = ｢
             }.new
         }
     }.new;
-    use lib 'lib';
     EVAL 'use RakudoPrereq $ARGS';
     say "alive";
 ｣;
 
 subtest 'die when given version' => {
     plan 2;
-    with run :out, :err, $*EXECUTABLE, '-e', $code.subst('$ARGS', 'v420000') {
+    with run :out, :err, $*EXECUTABLE, '-I.', '-e', $code.subst('$ARGS', 'v420000') {
         cmp-ok .out.slurp-rest(:close), '~~', *.contains('alive').not, 'died';
         cmp-ok .err.slurp-rest(:close), '~~',
             {.contains('requires Rakudo compiler version v420000')
@@ -37,7 +31,7 @@ subtest 'die when given version' => {
 
 subtest 'die when given version and custom message' => {
     plan 2;
-    with run :out, :err, $*EXECUTABLE, '-e', $code.subst(
+    with run :out, :err, $*EXECUTABLE, '-I.', '-e', $code.subst(
       '$ARGS', 'v420000, "custom message"'
     ) {
         cmp-ok .out.slurp-rest(:close), '~~', *.contains('alive').not, 'died';
@@ -49,7 +43,7 @@ subtest 'die when given version and custom message' => {
 
 subtest 'die when given version and rakudo-only' => {
     plan 3;
-    with run :out, :err, $*EXECUTABLE, '-e', $code.subst(
+    with run :out, :err, $*EXECUTABLE, '-I.', '-e', $code.subst(
       '$ARGS', 'v420000, "", "rakudo-only"'
     ).subst(｢'rakudo'｣, ｢'something else'｣) {
         cmp-ok .out.slurp-rest(:close), '~~', *.contains('alive').not, 'died';
@@ -65,7 +59,7 @@ subtest 'die when given version and rakudo-only' => {
 
 subtest 'die when given version and rakudo-only' => {
     plan 3;
-    with run :out, :err, $*EXECUTABLE, '-e', $code.subst(
+    with run :out, :err, $*EXECUTABLE, '-I.', '-e', $code.subst(
       '$ARGS', 'v420000, "custom message", "rakudo-only"'
     ).subst(｢'rakudo'｣, ｢'something else'｣) {
         cmp-ok .out.slurp-rest(:close), '~~', *.contains('alive').not, 'died';
@@ -81,7 +75,7 @@ subtest 'die when given version and rakudo-only' => {
 
 subtest 'die when given version and no-where' => {
     plan 2;
-    with run :out, :err, $*EXECUTABLE, '-e', $code.subst(
+    with run :out, :err, $*EXECUTABLE, '-I.', '-e', $code.subst(
       '$ARGS', 'v420000, "", "no-where"'
     ) {
         cmp-ok .out.slurp-rest(:close), '~~', *.contains('alive').not, 'died';
@@ -95,7 +89,7 @@ subtest 'die when given version and no-where' => {
 
 subtest 'die when given version and custom message and no-where' => {
     plan 2;
-    with run :out, :err, $*EXECUTABLE, '-e', $code.subst(
+    with run :out, :err, $*EXECUTABLE, '-I.', '-e', $code.subst(
       '$ARGS', 'v420000, "custom message", "no-where"'
     ) {
         cmp-ok .out.slurp-rest(:close), '~~', *.contains('alive').not, 'died';
@@ -107,7 +101,7 @@ subtest 'die when given version and custom message and no-where' => {
 
 subtest 'die when given version and rakudo-only and no-where' => {
     plan 3;
-    with run :out, :err, $*EXECUTABLE, '-e', $code.subst(
+    with run :out, :err, $*EXECUTABLE, '-I.', '-e', $code.subst(
       '$ARGS', 'v420000, "", "no-where rakudo-only"'
     ).subst(｢'rakudo'｣, ｢'something else'｣) {
         cmp-ok .out.slurp-rest(:close), '~~', *.contains('alive').not, 'died';
@@ -124,7 +118,7 @@ subtest 'die when given version and rakudo-only and no-where' => {
 
 subtest 'die when given version and rakudo-only and no-where' => {
     plan 3;
-    with run :out, :err, $*EXECUTABLE, '-e', $code.subst(
+    with run :out, :err, $*EXECUTABLE, '-I.', '-e', $code.subst(
       '$ARGS', 'v420000, "custom message", "rakUdo-oNly nO-wHeRe"'
     ).subst(｢'rakudo'｣, ｢'something else'｣) {
         cmp-ok .out.slurp-rest(:close), '~~', *.contains('alive').not, 'died';
@@ -140,7 +134,7 @@ subtest 'die when given version and rakudo-only and no-where' => {
 
 subtest 'die when given invalid options' => {
     plan 2;
-    with run :out, :err, $*EXECUTABLE, '-e', $code.subst(
+    with run :out, :err, $*EXECUTABLE, '-I.', '-e', $code.subst(
       '$ARGS', 'v420000, "custom message", "rakudo-only no-where blah-blah"'
     ).subst(｢'rakudo'｣, ｢'something else'｣) {
         cmp-ok .out.slurp-rest(:close), '~~', *.contains('alive').not, 'died';
@@ -151,3 +145,5 @@ subtest 'die when given invalid options' => {
             'error message has custom message and where it was';
     }
 }
+
+# vim: expandtab shiftwidth=4

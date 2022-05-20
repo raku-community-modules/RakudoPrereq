@@ -1,18 +1,30 @@
 {
-    "perl"         : "6.c",
-    "name"         : "RakudoPrereq",
-    "license"      : "Artistic-2.0",
-    "version"      : "1.001005",
-    "description"  : "Require specific versions of Rakudo",
-    "tags"         : [ "rakudo", "versioning" ],
-    "depends"      : [ ],
-    "test-depends" : [
-        "Test",
-        "Test::META"
-    ],
-    "provides"     : {
-        "RakudoPrereq" : "lib/RakudoPrereq.pm6"
-    },
-    "authors"       : ["Zoffix Znet"],
-    "support"       : {"source"   : "git://github.com/raku-community-modules/RakudoPrereq.git"}
+  "auth": "zef:raku-community-modules",
+  "authors": [
+    "Zoffix Znet"
+  ],
+  "build-depends": [
+  ],
+  "depends": [
+  ],
+  "description": "Specify minimum required versions of Rakudo",
+  "license": "Artistic-2.0",
+  "name": "RakudoPrereq",
+  "perl": "6.c",
+  "provides": {
+    "RakudoPrereq": "lib/RakudoPrereq.rakumod"
+  },
+  "resources": [
+  ],
+  "source-url": "https://github.com/raku-community-modules/RakudoPrereq.git",
+  "support": {
+    "source": "git://github.com/raku-community-modules/RakudoPrereq.git"
+  },
+  "tags": [
+    "rakudo",
+    "versioning"
+  ],
+  "test-depends": [
+  ],
+  "version": "1.1"
 }

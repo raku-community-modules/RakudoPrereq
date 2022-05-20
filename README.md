@@ -1,78 +1,79 @@
-[![Build Status](https://travis-ci.org/zoffixznet/perl6-RakudoPrereq.svg)](https://travis-ci.org/zoffixznet/perl6-RakudoPrereq)
+[![Actions Status](https://github.com/raku-community-modules/RakudoPrereq/actions/workflows/test.yml/badge.svg)](https://github.com/raku-community-modules/RakudoPrereq/actions)
 
-# NAME
+NAME
+====
 
 RakudoPrereq - Specify minimum required versions of Rakudo
 
-# SYNOPSIS
+SYNOPSIS
+========
 
-```perl6
-    use RakudoPrereq v2017.04; # specify minimum Rakudo version 2017.04
+```raku
+use RakudoPrereq v2021.04; # specify minimum Rakudo version 2021.04
 
-    # specify minimum Rakudo version 2017.04, with custom message
-    # when user's Rakudo is too old
-    use RakudoPrereq v2017.04, 'Your Raku is way too old, bruh!';
+# specify minimum Rakudo version 2021.04, with custom message
+# when user's Rakudo is too old
+use RakudoPrereq v2021.04, 'Your Raku is way too old, bruh!';
 
-    # specify minimum Rakudo version 2017.04, use default message and die
-    # when non-Rakudo compiler is used
-    use RakudoPrereq v2017.04, '', 'rakudo-only';
+# specify minimum Rakudo version 2021.04, use default message and die
+# when non-Rakudo compiler is used
+use RakudoPrereq v2021.04, '', 'rakudo-only';
 
-    # specify minimum Rakudo version 2017.04, use custom message and die
-    # when non-Rakudo compiler is used
-    use RakudoPrereq v2017.04, 'your compiler is no good', 'rakudo-only';
+# specify minimum Rakudo version 2021.04, use custom message and die
+# when non-Rakudo compiler is used
+use RakudoPrereq v2021.04, 'your compiler is no good', 'rakudo-only';
 
-    # specify minimum Rakudo version 2017.04, use default message and die
-    # when non-Rakudo compiler is used and don't print location of `use`
-    use RakudoPrereq v2017.04, '', 'rakudo-only no-where';
+# specify minimum Rakudo version 2021.04, use default message and die
+# when non-Rakudo compiler is used and don't print location of `use`
+use RakudoPrereq v2021.04, '', 'rakudo-only no-where';
 ```
 
-# DESCRIPTION
+DESCRIPTION
+===========
 
-Need to black-list non-Rakudo compilers or some Rakudo versions that implement
-the same language version? This module is for you!
+Need to black-list non-Rakudo compilers or some Rakudo versions that implement the same language version? This module is for you!
 
-If the program is run on a Rakudo that's too old, the module will print a
-message and exit with status `1`
+If the program is run on a Rakudo that's too old, the module will print a message and exit with status `1`
 
-# USAGE
+USAGE
+=====
 
 The entire API is via the arguments specified on the `use RakudoPrereq` line.
 
-- **Minimum Rakudo version:** The first argument is required and is the
-  [`Version`](https://docs.raku.org/type/Version)
-  object specifying the minimum required Rakudo version.
-- **Custom message:** by default, the module will print a generic message
-  before exiting, you can specify a custom message here. Default message will
-  be printed if the specified custom message is an empty string
-- **String with options:** space-separated string of options
-  - `rakudo-only` - by default, the module would not fail if the compiler
-    is not Rakudo. Specify this option if you want to fail for non-Rakudo
-    compilers as well, regardless of their version.
-  - `no-where` - both the default and custom message will have the location
-    of where the `use RakudoPrereq` that caused failure is at. Specify this
-    argument if you want to surpress that information.
+Minimum Rakudo version
+----------------------
 
-----
+The first argument is required and is the [`Version`](https://docs.raku.org/type/Version) object specifying the minimum required Rakudo version.
 
-#### REPOSITORY
+Custom message
+--------------
 
-Fork this module on GitHub:
-https://github.com/raku-community-modules/RakudoPrereq
+By default, the module will print a generic message before exiting, you can specify a custom message here. Default message will be printed if the specified custom message is an empty string.
 
-#### BUGS
+String with options
+-------------------
 
-To report bugs or request features, please use
-https://github.com/raku-community-modules/RakudoPrereq/issues
+Space-separated string of options:
 
-#### AUTHOR
+### rakudo-only
 
-Zoffix Znet (http://perl6.party/)
+By default, the module would not fail if the compiler is not Rakudo. Specify this option if you want to fail for non-Rakudo compilers as well, regardless of their version.
 
-#### LICENSE
+### no-where
 
-You can use and distribute this module under the terms of the
-The Artistic License 2.0. See the `LICENSE` file included in this
-distribution for complete details.
+Both the default and custom message will have the location of where the `use RakudoPrereq` that caused failure is at. Specify this argument if you want to surpress that information.
 
-The `META6.json` file of this distribution may be distributed and modified
-without restrictions or attribution.
+AUTHOR
+======
+
+Zoffix Znet
+
+COPYRIGHT AND LICENSE
+=====================
+
+Copyright 2017 Zoffix Znet
+
+Copyright 2018 - 2022 Raku Community
+
+This library is free software; you can redistribute it and/or modify it under the Artistic License 2.0.
+
